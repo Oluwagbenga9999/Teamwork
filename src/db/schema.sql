@@ -4,3 +4,20 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS articles (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    article TEXT NOT NULL,
+    author_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    Created_on TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS gifs (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  image_url TEXT NOT NULL,
+  author_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_on TIMESTAMP DEFAULT NOW(),
+  public_id TEXT
+);
