@@ -21,3 +21,23 @@ CREATE TABLE IF NOT EXISTS gifs (
   created_on TIMESTAMP DEFAULT NOW(),
   public_id TEXT
 );
+
+CREATE TABLE IF NOT EXISTS article_comments (
+  id SERIAL PRIMARY KEY,
+  comment TEXT NOT NULL,
+  article_id INT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+  author_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_on TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS gif_comments (
+  id SERIAL PRIMARY KEY,
+  comment TEXT NOT NULL,
+  gif_id INT NOT NULL REFERENCES gifs(id) ON DELETE CASCADE,
+  author_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_on TIMESTAMP DEFAULT NOW()
+);
+
+SELECT c.comment, a.title
+FROM article_comments c
+JOIN articles a ON a.id = c.article_id;
