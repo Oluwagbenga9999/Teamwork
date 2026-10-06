@@ -127,6 +127,51 @@ const commentOnGif = async (req, res) => {
   }
 }
 
+const getGif = async (req, res) => {
+    const gifId = Number(req.params.gifId);
+
+    if (!Number.isInteger(gifId)) {
+        return res.status(400).json({ status: 'error', error: 'Invalid gif id'});
+    }
+
+    try {
+        const found = await pool.query(
+            'SELECT id, created_on, title, image_url FROM gifs WHERE id = $1',
+            [gifId],
+        );
+
+        if (found.rows.length === 0) {
+            return res.status(404).json({ status: 'error', error: 'Gif not found' });
+        }
+
+        const commentResult = await pool.query(
+            'SELECT id, comment, author_id FROM gif_comments WHERE gif_id = $1 ORDER BY created_on ASC',
+            [gifId],
+        );
+
+        const row = found.rows[0];
+
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                id: row.id,
+                createdOn: row.created_on,
+                title: row.title,
+                url: row.image_url,
+                comments: commentResult.rows.map((c) => ({
+                    commentId: c.id,
+                    authorId: c.author_id,
+                    comment: c.comment,
+                })),
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'error', error: 'Server error' });
+    }
+};
+
+
 export {
-  createGif, deleteGif, commentOnGif,
+  createGif, getGif, deleteGif, commentOnGif,
 }
