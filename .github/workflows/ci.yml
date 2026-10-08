@@ -17,23 +17,23 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: teamwork_test
         ports:
-          - 5432:5429
+          - 5429:5429
         options: >-
           --health-cmd "pg_isready -U postgres"
           --health-interval 5s
           --health-timeout 5s
           --health-retires 10
   
-  env:
-    TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5429/teamwork_test
-    JWT_SECRET: ci_test_secret
+    env:
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5429/teamwork_test
+      JWT_SECRET: ci_test_secret
 
-  steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: npm
-    - run: npm ci
-    - run: psql "$TEST_DATABASE_URL" -f src/db/schema.sql
-    - run: npm test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: psql "$TEST_DATABASE_URL" -f src/db/schema.sql
+      - run: npm test
