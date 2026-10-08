@@ -37,6 +37,6 @@ CREATE TABLE IF NOT EXISTS gif_comments (
   author_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created_on TIMESTAMP DEFAULT NOW()
 );
--- SELECT c.comment, a.title
--- FROM article_comments c
--- JOIN articles a ON a.id = c.article_id;
+SELECT c.comment, a.title
+FROM article_comments c
+JOIN articles a ON a.id = c.article_id;
