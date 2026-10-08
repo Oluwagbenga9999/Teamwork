@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS gifs (
   id SERIAL PRIMARY KEY,
   title VARCHAR(200) NOT NULL,
   image_url TEXT NOT NULL,
+  public_id TEXT,
   author_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created_on TIMESTAMP DEFAULT NOW(),
-  public_id TEXT
 );
 
 CREATE TABLE IF NOT EXISTS article_comments (
