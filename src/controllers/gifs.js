@@ -71,7 +71,6 @@ const deleteGif = async (req, res) => {
         }
 
         const publicId = found.rows[0].public_id;
-        console.log(publicId);
         await pool.query('DELETE FROM gifs WHERE id = $1', [gifId]);
         if (publicId) {
             await cloudinary.uploader.destroy(publicId)
