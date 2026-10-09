@@ -20,6 +20,7 @@
     "test": "cross-env NODE_ENV=test mocha --exit",
     "coverage": "cross-env NODE_ENV=test c8 --reporter=text --reporter=lcov mocha --exit"
   },
+  "engines": { "node": ">=20" },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.11.0",
