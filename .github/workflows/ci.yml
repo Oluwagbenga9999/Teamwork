@@ -35,5 +35,5 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-            - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f src/db/schema.sqll
+      - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f src/db/schema.sql
       - run: npm test
