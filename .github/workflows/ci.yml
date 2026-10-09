@@ -36,4 +36,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: psql "$TEST_DATABASE_URL" -v ON_ERROR_STOP=1 -f src/db/schema.sql
-      - run: npm test
+      - run: npm run coverage
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
