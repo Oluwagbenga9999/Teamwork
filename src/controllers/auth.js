@@ -40,7 +40,7 @@ const signIn = async (req, res) => {
 
     try {
         const result = await pool.query(
-            'SELECT id, email, password FROM users WHERE email = $1',
+            'SELECT id, email, password, is_admin FROM users WHERE email = $1',
             [email],
         );
         const user = result.rows[0];
@@ -56,7 +56,7 @@ const signIn = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: user.id, email: user.email },
+            { userId: user.id, email: user.email, isAdmin: user.is_admin },
             process.env.JWT_SECRET,
             { expiresIn: '24h' },
         );
