@@ -18,7 +18,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "cross-env NODE_ENV=test mocha --exit",
-    "coverage": "cross-env NODE_ENV=test c8 mocha --exit"
+    "coverage": "cross-env NODE_ENV=test c8 --reporter=text --reporter=lcov mocha --exit"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
