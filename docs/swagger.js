@@ -14,8 +14,9 @@ const swaggerSpec = {
     paths: {
         '/auth/create-user': {
             post: {
-                summary: 'Create an employee user account',
+                summary: 'Create an employee user account (admin only)',
                 tags: ['Auth'],
+                security: [{ tokenAuth: [] }],
                 requestBody: {
                     required: true,
                     content: {
@@ -35,6 +36,8 @@ const swaggerSpec = {
                 responses: {
                     201: { description: 'User account successfully created' },
                     400: { description: 'Missing required fields' },
+                    401: { description: 'Missing or invalid token' },
+                    403: { description: 'Only an admin can perform this action' },
                     409: { description: 'Email already exists' },
                 },
             },
