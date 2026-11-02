@@ -1,4 +1,4 @@
-![CI](https://github.com/USERNAME/REPO/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/Oluwagbenga9999/Teamwork/actions/workflows/ci.yml/badge.svg)
 
 [![Coverage Status](https://coveralls.io/repos/github/Oluwagbenga9999/Teamwork/badge.svg?branch=develop)](https://coveralls.io/github/Oluwagbenga9999/Teamwork?branch=develop)
 

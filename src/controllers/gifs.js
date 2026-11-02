@@ -4,7 +4,7 @@ import cloudinary from '../db/cloudinary.js';
 
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 },
+    limits: { fileSize: 4 * 1024 * 1024 },
 });
 
 
@@ -168,7 +168,7 @@ const getGif = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'error', error: 'Server error' });
+        return res.status(500).json({ status: 'error', error: 'Server error' });
     }
 };
 

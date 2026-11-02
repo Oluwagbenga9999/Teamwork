@@ -19,6 +19,9 @@ export const signIn = async (email, password) => {
     .post('/api/v1/auth/signin')
     .send({ email, password });
 
+  if (!res.body.data) {
+    throw new Error(`Sign-in failed for ${email}: ${res.status} ${JSON.stringify(res.body)}`);
+  }
   return { token: res.body.data.token, userId: res.body.data.userId };
 };
 
@@ -33,7 +36,7 @@ export const createUserAndToken = async (email) => {
   await request(app)
     .post('/api/v1/auth/create-user')
     .set('token', adminToken)
-    .send({ firstName: 'Test', email, password: 'secret123' });
+    .send({ firstName: 'Test', lastName: 'User', email, password: 'secret123' });
 
   return signIn(email, 'secret123');
 };
