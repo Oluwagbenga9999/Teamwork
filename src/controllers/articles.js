@@ -161,43 +161,43 @@ const getArticle = async (req, res) => {
 
     if (!Number.isInteger(articleId)) {
         return res.status(400).json({ status: 'error', error: 'Invalid article id' });
+    }
+
+    try {
+        const found = await pool.query(
+            'SELECT id, created_on, title, article, author_id FROM articles WHERE id = $1',
+            [articleId],
+        );
+        if (found.rows.length === 0) {
+            return res.status(404).json({ status: 'error', error: 'Article not found' });
         }
 
-        try {
-            const found = await pool.query(
-                'SELECT id, created_on, title, article FROM articles WHERE id = $1',
-                [articleId],
-            );
+        const commentsResult = await pool.query(
+            'SELECT id, comment, author_id FROM article_comments WHERE article_id = $1 ORDER BY created_on ASC',
+            [articleId],
+        );
 
-            if (found.rows.length === 0) {
-                return res.status(404).json({ status: 'error', error: 'Article not found' });
-            }
+        const row = found.rows[0];
 
-            const commentsResult = await pool.query(
-                'SELECT id, comment, author_id FROM article_comments WHERE article_id = $1 ORDER BY created_on ASC',
-                [articleId],
-            );
-
-            const row = found.rows[0];
-
-            return res.status(200).json({
-                status: 'success',
-                data: {
-                    id: row.id,
-                    createdOn: row.created_on,
-                    title: row.title,
-                    article: row.article,
-                    comments: commentsResult.rows.map((c) => ({
-                        commentId: c.id,
-                        comment: c.comment,
-                        authorId: c.author_id
-                    })),
-                },
-            });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ status: 'error', error: 'Server error' });
-        }
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                id: row.id,
+                createdOn: row.created_on,
+                title: row.title,
+                article: row.article,
+                authorId: row.author_id,
+                comments: commentsResult.rows.map((c) => ({
+                    commentId: c.id,
+                    comment: c.comment,
+                    authorId: c.author_id
+                })),
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ status: 'error', error: 'Server error' });
+    }
 }
 
 export {

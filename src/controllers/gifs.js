@@ -137,7 +137,7 @@ const getGif = async (req, res) => {
 
     try {
         const found = await pool.query(
-            'SELECT id, created_on, title, image_url FROM gifs WHERE id = $1',
+            'SELECT id, created_on, title, image_url, author_id FROM gifs WHERE id = $1',
             [gifId],
         );
 
@@ -159,6 +159,7 @@ const getGif = async (req, res) => {
                 createdOn: row.created_on,
                 title: row.title,
                 url: row.image_url,
+                authorId: row.author_id,
                 comments: commentResult.rows.map((c) => ({
                     commentId: c.id,
                     authorId: c.author_id,
