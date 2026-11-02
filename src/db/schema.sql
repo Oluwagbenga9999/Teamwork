@@ -2,10 +2,23 @@ CREATE TABLE
   IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50),
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    gender VARCHAR(20),
+    job_role VARCHAR(100),
+    department VARCHAR(100),
+    address VARCHAR(255),
     is_admin BOOLEAN NOT NULL DEFAULT FALSE
   );
+
+-- For a database that already has the old users table:
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS last_name VARCHAR(50),
+ADD COLUMN IF NOT EXISTS gender VARCHAR(20),
+ADD COLUMN IF NOT EXISTS job_role VARCHAR(100),
+ADD COLUMN IF NOT EXISTS department VARCHAR(100),
+ADD COLUMN IF NOT EXISTS address VARCHAR(255);
 
 CREATE TABLE
   IF NOT EXISTS articles (
@@ -43,10 +56,3 @@ CREATE TABLE
     author_id INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     created_on TIMESTAMP DEFAULT NOW ()
   );
-
-SELECT
-  c.comment,
-  a.title
-FROM
-  article_comments c
-  JOIN articles a ON a.id = c.article_id;

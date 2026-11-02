@@ -22,17 +22,21 @@ describe('Auth endpoints', () => {
       const res = await request(app)
         .post('/api/v1/auth/create-user')
         .set('token', adminToken)
-        .send({ firstName: 'Ada', email: 'ada@test.com', password: 'secret123' });
+        .send({
+          firstName: 'Ada', lastName: 'Lovelace', email: 'ada@test.com', password: 'secret123',
+        });
 
       expect(res.status).to.equal(201);
       expect(res.body.status).to.equal('success');
       expect(res.body.data).to.not.have.property('password');
+      expect(res.body.data).to.have.property('token');
+      expect(res.body.data).to.have.property('userId');
     });
 
     it('rejects a request with no token', async () => {
       const res = await request(app)
         .post('/api/v1/auth/create-user')
-        .send({ firstName: 'Eve', email: 'eve@test.com', password: 'secret123' });
+        .send({ firstName: 'Eve', lastName: 'Lovelace', email: 'eve@test.com', password: 'secret123' });
 
       expect(res.status).to.equal(401);
     });
@@ -43,7 +47,7 @@ describe('Auth endpoints', () => {
       const res = await request(app)
         .post('/api/v1/auth/create-user')
         .set('token', employee.token)
-        .send({ firstName: 'Eve', email: 'eve@test.com', password: 'secret123' });
+        .send({ firstName: 'Eve', lastName: 'Lovelace', email: 'eve@test.com', password: 'secret123' });
 
       expect(res.status).to.equal(403);
     });
@@ -52,7 +56,9 @@ describe('Auth endpoints', () => {
       const res = await request(app)
         .post('/api/v1/auth/create-user')
         .set('token', adminToken)
-        .send({ firstName: 'Ada', email: 'ada@test.com', password: 'secret123' });
+        .send({
+          firstName: 'Ada', lastName: 'Lovelace', email: 'ada@test.com', password: 'secret123',
+        });
 
       expect(res.status).to.equal(409);
       expect(res.body.status).to.equal('error');

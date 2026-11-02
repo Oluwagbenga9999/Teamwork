@@ -4,7 +4,7 @@ import cloudinary from '../db/cloudinary.js';
 
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 },
+    limits: { fileSize: 4 * 1024 * 1024 },
 });
 
 
@@ -137,7 +137,7 @@ const getGif = async (req, res) => {
 
     try {
         const found = await pool.query(
-            'SELECT id, created_on, title, image_url FROM gifs WHERE id = $1',
+            'SELECT id, created_on, title, image_url, author_id FROM gifs WHERE id = $1',
             [gifId],
         );
 
@@ -159,6 +159,7 @@ const getGif = async (req, res) => {
                 createdOn: row.created_on,
                 title: row.title,
                 url: row.image_url,
+                authorId: row.author_id,
                 comments: commentResult.rows.map((c) => ({
                     commentId: c.id,
                     authorId: c.author_id,
@@ -168,7 +169,7 @@ const getGif = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'error', error: 'Server error' });
+        return res.status(500).json({ status: 'error', error: 'Server error' });
     }
 };
 
