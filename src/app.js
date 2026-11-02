@@ -5,8 +5,10 @@ import gifRoutes from './routes/gifs.js';
 import feedRoutes from './routes/feed.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from '../docs/swagger.js';
+import cors from 'cors';
 
 
+app.use(cors());
 const app = express();
 
 app.use(express.json());
