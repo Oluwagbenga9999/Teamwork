@@ -42,7 +42,7 @@ const editArticle = async (req, res) => {
 
     if (!title || !article) {
         return res.status(400).json({
-            status: 'eror',
+            status: 'error',
             error: 'title and article are required',
         });
     }
@@ -67,7 +67,7 @@ const editArticle = async (req, res) => {
         );
 
         return res.status(200).json({
-            status: 'Success',
+            status: 'success',
             data: {
                 message: 'Article successfully updated',
                 title: result.rows[0].title,

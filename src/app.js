@@ -8,8 +8,10 @@ import swaggerSpec from '../docs/swagger.js';
 import cors from 'cors';
 
 
-app.use(cors());
 const app = express();
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : true,
+}));
 
 app.use(express.json());
 app.use('/api/v1/auth', authRoutes);

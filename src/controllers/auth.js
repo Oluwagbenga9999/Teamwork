@@ -3,30 +3,44 @@ import jwt from 'jsonwebtoken';
 import pool from '../db/index.js';
 
 const createUser = async (req, res) => {
-    const { firstName, email, password } = req.body;
+  const {
+    firstName, lastName, email, password, gender, jobRole, department, address,
+  } = req.body;
 
-    if (!firstName || !email || !password) {
-        return res.status(400).json({
-            status: 'error',
-            error: 'firstName, email and password are required',
-        });
-    }
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({
+      status: 'error',
+      error: 'firstName, lastName, email and password are required',
+    });
+  }
 
-    try {
-        const hash = await bcrypt.hash(password, 10);
-        const result = await pool.query(
-            'INSERT INTO users (first_name, email, password) VALUES ($1, $2, $3) RETURNING id, first_name, email',
-            [firstName, email, hash],
-        );
-        return res.status(201).json({ status: 'success', data: result.rows[0] });
-    } catch (error) {
-        if (error.code === '23505') {
-            return res.status(409).json({status: 'error', error: 'Email already exists' });
-        }
-        console.log(error)
-        return res.status(500).json({ status: 'error', error: 'Server error'});
+  try {
+    const hash = await bcrypt.hash(password, 10);
+    const result = await pool.query(
+      `INSERT INTO users (first_name, last_name, email, password, gender, job_role, department, address)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id, email, is_admin`,
+      [firstName, lastName, email, hash, gender, jobRole, department, address],
+    );
+    const user = result.rows[0];
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, isAdmin: user.is_admin },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' },
+    );
+
+    return res.status(201).json({
+      status: 'success',
+      data: { message: 'User account successfully created', token, userId: user.id },
+    });
+  } catch (error) {
+    if (error.code === '23505') {
+      return res.status(409).json({ status: 'error', error: 'Email already exists' });
     }
-}
+    console.error(error);
+    return res.status(500).json({ status: 'error', error: 'Server error' });
+  }
+};
 
 const signIn = async (req, res) => {
     const { email, password } = req.body;
