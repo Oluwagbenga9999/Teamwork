@@ -23,18 +23,23 @@ const swaggerSpec = {
                         'application/json': {
                             schema: {
                                 type: 'object',
-                                required: ['firstName', 'email', 'password'],
+                                required: ['firstName', 'lastName', 'email', 'password'],
                                 properties: {
                                     firstName: { type: 'string', example: 'Ada' },
+                                    lastName: { type: 'string', example: 'Lovelace' },
                                     email: { type: 'string', example: 'ada@test.com' },
                                     password: { type: 'string', example: 'secret123' },
+                                    gender: { type: 'string', example: 'female' },
+                                    jobRole: { type: 'string', example: 'Engineer' },
+                                    department: { type: 'string', example: 'Engineering' },
+                                    address: { type: 'string', example: '12 Marina Road, Lagos' },
                                 },
                             },
                         },
                     },
                 },
                 responses: {
-                    201: { description: 'User account successfully created' },
+                    201: { description: 'User account created. Returns message, token and userId' },
                     400: { description: 'Missing required fields' },
                     401: { description: 'Missing or invalid token' },
                     403: { description: 'Only an admin can perform this action' },
